@@ -4,8 +4,6 @@ Created on Mon Mar 11 09:47:10 2024
 
 This Script showcases the useage of Environment Variables to pass Credentials 
 to EODAG.
-
-@author: npikall
 """
 #Imports
 import os

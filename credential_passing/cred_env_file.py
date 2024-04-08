@@ -4,8 +4,6 @@ Created on Mon Mar 11 09:47:10 2024
 
 This Script showcases the useage of the dotenv Module to pass Credentials 
 to EODAG.
-
-@author: npikall
 """
 #Imports
 from eodag import EODataAccessGateway

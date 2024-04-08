@@ -4,15 +4,13 @@ Created on Mon Mar 11 09:47:10 2024
 
 This Script showcases the useage of Environment Variables to pass Credentials 
 to EODAG.
-
-@author: npikall
 """
 #Imports
 from eodag import EODataAccessGateway
 
 
 #%%
-#Set Credentials for Copernicus Dataspace Ecosystem (CDSE) as Environment Variable.
+#Set Credentials for Copernicus Dataspace Ecosystem (CDSE) in YAML Config File from EODAG.
 dag = EODataAccessGateway()
 dag.update_providers_config("""
     cop_dataspace:
