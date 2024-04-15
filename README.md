@@ -13,4 +13,3 @@ The repo contains the following elements:
 - A notebook for explaining xarrays `00_xarray-tutorial.ipynb`
 - A notebook for explaining git `00_git-tutorial.ipynb`
 - Additionaly different scripts explaining the passing of credentials to EODAG methods
- This is a test
