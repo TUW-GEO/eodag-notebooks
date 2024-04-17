@@ -1,6 +1,6 @@
 ![EODAG]( https://eodag.readthedocs.io/en/latest/_static/eodag_bycs.png)
 
-![CDSE](https://dataspace.copernicus.eu/themes/custom/copernicus/logo.svg)
+![CDSE](![https://dataspace.copernicus.eu/themes/custom/copernicus/logo.svg](https://dataspace.copernicus.eu/sites/default/files/styles/opengraph/public/media/images/2023-03/og_share.png?itok%253DzjtW85Fb))
 
 # eodag-workflows
 
