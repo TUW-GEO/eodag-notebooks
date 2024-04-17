@@ -1,6 +1,6 @@
-![EODAG]( https://eodag.readthedocs.io/en/latest/_static/eodag_bycs.png)
+<img src ="https://eodag.readthedocs.io/en/latest/_static/eodag_bycs.png" width=200>
 
-![CDSE](https://dataspace.copernicus.eu/sites/default/files/styles/opengraph/public/media/images/2023-03/og_share.png?itok%253DzjtW85Fb)
+<img src="https://dataspace.copernicus.eu/sites/default/files/styles/opengraph/public/media/images/2023-03/og_share.png?itok%253DzjtW85Fb" width="200">
 
 # eodag-workflows
 
