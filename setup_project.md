@@ -66,19 +66,53 @@ For pip use:
 pip freeze > requirements.txt
 ```
 
+### Removing (Deleting) an Environment
+
+In order to delete a conda environment use
+```
+conda remove -n myenv --all
+```
+
 
 ## Python venv (Virtual Environment)
 ### Initialisation
 
 1. Make a directory where the project should be
-2. Initialize a new virtual environment. Use for example `python -m venv .venv` to create the .venv directory which houses the environment (any Name can be given, but env, .env, venv, .venv are often used)
-3. Activate the environment `.venv` by useing `source .venv/bin/activate` in Linux or just `activate` in Windows (Might need to deactivate base environment beforehand with `conda deactivate`)
+2. Initialize a new virtual environment. Use the following command to create the .venv directory which houses the environment (any Name can be given, but env, .env, venv, .venv are often used)
+```
+python -m venv .venv
+```
+
+3. Activate the environment `.venv` by useing (for Linux)
+```
+source .venv/bin/activate
+```
+or for Windows use (might need to deactivate base environment beforehand with `conda deactivate`)
+```
+activate
+```
+
 4. Create a file called `.gitignore` and write `.venv` (or in general files that shouldn`t be tracked). Git will then ignore the environment, or else Git might have too many files too track (easily more than 10 000) aftrer initialization
-5.  Use `pip install <file1> [<file2> ...]` to install the Packages required for the project
+
+5.  Use the following command to install the Packages required for the project
+```
+pip install <file1> [<file2> ...]
+```
+
 6. Create the actual `.py` or `.ipynb` files to start writing the code
 7. Start tracking your files with `git init` or use a remote repo
-8. Use `pip freeze > requirements.txt` to create a requirements file, for other people to easily install all needed packages in the future, when useing your code
+8. To create a requirements file (which helps other people to easily install all needed packages in the future when useing your code) use the following command
+```
+pip freeze > requirements.txt
+```
+
 9. Write a  `README.md` file, which lets others know how to use the repo
+
+### Remove an environment
+In order to remove a virtual environment that has been made with ``python venv`` the environment needs to be __deactivated__ at first (similar command as creation, just with *deactivate* instead of *activate*). After that use the following comand to remove or delete your environment.
+```
+rm -r .venv
+```
 
 ## README file convention
 The following informations are taken from [Github Docs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes).

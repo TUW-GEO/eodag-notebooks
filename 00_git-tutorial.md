@@ -1,5 +1,6 @@
 # Github Introduction
-This is a introduction into Git. It is intended to be a simple tutorial into Github/Gitlab and its commands. For a more in depth look into git checkout the [Git Book](https://git-scm.com/book/de/v2 ).
+This is a introduction into Git. It is intended to be a simple tutorial into Git/Github/Gitlab and its commands.
+For a more in depth look into git checkout the [Git Book](https://git-scm.com/book/de/v2 ).
 
 ## Frequently used Commands
 
@@ -15,6 +16,7 @@ This is a introduction into Git. It is intended to be a simple tutorial into Git
 - `git checkout mybranch` changes to another branch and with `-b my branch` git creates and switches to that branch
 - `git branch` creates a new branch, with `-d` branch gets deleted
 - `git merge mybranch` branch wird in master branch integriert
+- `git rm myfile` to delete a file
 
 ## General idea of Git 
 
@@ -24,7 +26,8 @@ changes to a file or set of files over time so that you can recall specific vers
 ## Git Basics on your Local Machine
 ### Creating a Repository on your local machine
 
-The most basic case for the useage of git would be version control on your local machine. For that there are two ways wich will get you a Git repository (or short repo).
+The most basic case for the useage of git would be version control on your local machine. For that 
+there are two ways wich will get you a Git repository (or short repo).
 
 - 1. You turn a local directory into a Git repo or
 - 2. You clone (copy) an existing Git repo from elsewhere
@@ -34,21 +37,23 @@ In either case, you end up with a Git repository on your local machine, ready fo
 #### Initializing a repository in an existing directory
 
 If you have a project directory that is currently not under version control and you want to start
-controlling it with Git, you first need to go to that project’s directory useing the change directory command `cd` in an terminal. If you’ve never done this, it
-looks a little different depending on which system you’re running:
+controlling it with Git, you first need to go to that project’s directory useing the change directory 
+command `cd` in an terminal. If you’ve never done this, it looks a little different depending on which 
+system you’re running:
 - Linux: `$ cd /home/user/my_project`
 - MacOS: `$ cd /Users/user/my_project`
 - Windows: `$ cd C:/Users/user/my_project`
 
-and then type `$ git init`. This creates a new subdirectory named .git that contains all of your necessary repository files - a
-Git repository skeleton. At this point, nothing in your project is tracked yet.
+and then type `$ git init`. This creates a new subdirectory named .git that contains all of your necessary 
+repository files - a Git repository skeleton. At this point, nothing in your project is tracked yet.
 
 If you want to start version-controlling existing files (as opposed to an empty directory), you should
 probably begin tracking those files and do an initial commit. You can accomplish that with a few
 `git add` commands that specify the files you want to track, followed by a `git commit`:
 
 - `$ git add myFile.txt` this command adds the file to the files the will be tracked.
-- `git commit -m "My first git Commit"` this command commits the file (kind of like saving a file) and adds a message with `-m "..."` to the commit.
+- `git commit -m "My first git Commit"` this command commits the file (kind of like saving a file) and 
+adds a message with `-m "..."` to the commit.
 
 The commit message should shortly describe the changes that happend to the files since the last commit. 
 
@@ -86,7 +91,7 @@ As you edit files, Git sees them as modified, because you’ve changed them sinc
 As you work, you selectively stage these modified files and then commit all those staged changes,
 and the cycle repeats.
 
-<img src="Graphics/git_lifecycle.png">
+<img src="Graphics/git_lifecycle.png" width=700>
 
 The main tool you use to determine which files are in which state is the ``git status`` command. If you
 run this command directly after a clone, you should see something like this:
@@ -113,21 +118,63 @@ To Stage modified Files, which has already been tracked, you also use:
 
 Basically if you want a file to be in the stage'ing state you use `git add`. 
 
-After that you want to commit the files, but there is an easier way to add a lot of files and to commit them.
+After that you want to commit the files, but there is an easier way to add a lot of files and 
+to commit them.
 
-Use `git commit -a -m "my commit message"` to add all modified  (not untracked) files with `-a` and commit them.
+Use `git commit -a -m "my commit message"` to add all modified  (not untracked) files with `-a`
+and commit them.
 
-Sometimes you don't want Git to show you some files. Then you can create a new file in your directory called `.gitignore`.
-In each line of this file ther should be some kind of filename, which you want git to ignore. There are a few shortcuts for 
-files with the same ending, but for that checkout the Git Book on page 32.
+Sometimes you don't want Git to show you some files. Then you can create a new file in your 
+directory called `.gitignore`. In each line of this file ther should be some kind of filename, 
+which you want git to ignore. There are a few shortcuts for files with the same ending, but 
+for that checkout the Git Book on page 32.
 
 ## Branching
 
-With every commit Git saves a snapshot of your files. All the previous commits (or with other words the history of the files) represent 
-a branch. The default branch is called __master__ or __main__. Either for fixing issues with the code, or to work simultaniously with 
-other developers it might be the best way to create different branches, which don't actually influence the __main__ branch. 
+With every commit Git saves a snapshot of your files. All the previous commits (or with other words 
+the history of the files) represent a branch. The default branch is called __master__ or __main__. 
+Either for fixing issues with the code, or to work simultaniously with other developers it might be 
+the best way to create different branches, which don't actually influence the __main__ branch. The 
+following is a simple example, which intends to show the merging processes.
 
-## Git remote Repository
+This is your master branch, which already has a commit history with 3 commits.
+
+<img src="Graphics/01_simple_commit_history.png" width=500>
+
+Now you add a new branch (`git checkout -b iss53`), which works on an issue (*iss53*) in your code. 
+
+<img src="Graphics/02_new_branch.png" width=500>
+
+You now have done some changes to your code in the *iss53* branch and commit the changes. Now only the 
+branch *iss53* moves forward.
+
+<img src="Graphics/03_commit_new_branch.png" width=500>
+
+Next you want to change another problem which you call *hotfix*. You first move back to the master 
+branch and create the *hotfix* branch. (`git checkout master` followed by `git checkout -b hotfix`).
+The you commit the changes in the *hotfix* branch aswell.
+
+<img src="Graphics/04_second_branch.png" width=500>
+
+Now you want to merge the *master* and the *hotfix* branches with `git checkout master` followed by 
+`git merge hotfix`.
+
+<img src="Graphics/05_master_fwd.png" width=500>
+
+As the *hotfix* branch has become redundant you delete it with `git branch -d hotfix`. Now you can 
+keep working on *iss53* and commit another change.
+
+<img src="Graphics/06_second_commit.png" width=500>
+
+At last you can merge the *iss53* with the *master* branch. As it is a little bit different now as 
+compared to the first merging process the following files will be used for the merging.
+
+<img src="Graphics/07_files_merge.png" width=500>
+
+After `git checkout master` followed by ` git merge iss53` you can delete the *iss53* branch with 
+`git branch -d iss53`. The merged branches now look like that.
+
+<img src="Graphics/08_merge_commit.png" width=500>
 
 
 ## Git Help:
