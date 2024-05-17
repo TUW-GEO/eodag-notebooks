@@ -1,4 +1,6 @@
 .env
 remove
+data
 data/eodag*
 data/shapefiles
+notebooks/eotools/__pycache__
