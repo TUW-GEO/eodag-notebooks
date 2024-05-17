@@ -1,0 +1,11 @@
+credentials: ./.env # .env file should be in same directory as Notebooks
+
+data: ../data # defines the Folder where downloads and other file are stored
+
+download: ../data/eodag-downloads
+
+serialize: ../data/eodag-serialize
+
+post: ../data/eodag-postprocess
+
+shapefiles: ../data/shapefiles
