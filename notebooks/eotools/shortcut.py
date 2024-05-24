@@ -38,14 +38,14 @@ def prepare(path:str = "paths.yml", log:bool=True):
 
     return secrets, paths
 
-def configure(secrets, paths):
+def configure(secrets:dict, ws_paths:dict):
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace") # Copernicus Data Space Ecosystem
 
     dag.update_providers_config(f"""
         cop_dataspace:
             download:
-                outputs_prefix: {os.path.abspath(paths['download'])}
+                outputs_prefix: {os.path.abspath(ws_paths['download'])}
             auth:
                 credentials:
                     username: {secrets['USER_KEY']}
@@ -72,3 +72,15 @@ def plot_quicklooks(products):
                        labelleft=False, labelbottom=False)
         plt.imshow(img)
     plt.tight_layout()
+
+def deserialize(filepath:str, ws_path:str, dag:EODataAccessGateway, log=True):
+    # Deserialize the Search Results
+    output_file = os.path.join(ws_path['serialize'], filepath)
+    deserialized_search_results = dag.deserialize_and_register(output_file)
+
+    if log:
+        print(f"Got {len(deserialized_search_results)} deserialized products.")
+
+    return deserialized_search_results
+
+

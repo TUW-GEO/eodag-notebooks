@@ -33,14 +33,12 @@ kernel:
 	conda run -p ~/.conda/envs/eoenv python -m ipykernel install --user --name "eoenv" --display-name "eoenv"
 	@echo -e "conda jupyter kernel is ready"
 
-simple-kernel:
+environment:
 	cd ~/work/eodag-workflows/setup
 	mkdir -p ~/.conda/envs
-	mamba env create -p ~/.conda/envs/eoenv -f eoenv-simple.yml
+	mamba env create -p ~/.conda/envs/eoenv -f eoenv.yml
 	mamba clean --all -f -y #&& fix-permissions /home/$NB_USER/.conda
 	@echo -e "environment has been created and cleaned"
-	conda run -p ~/.conda/envs/eoenv python -m ipykernel install --user --name "eoenv" --display-name "eoenv"
-	@echo -e "conda jupyter kernel is ready"
 
 teardown:
 	source activate ~/.conda/envs/eoenv
@@ -48,5 +46,5 @@ teardown:
 	conda deactivate
 	conda env remove -p ~/.conda/envs/eoenv
 
-jupyter: kernel develop
-	jupyter lab .
+jupyter: #kernel develop
+	jupyter lab ..
