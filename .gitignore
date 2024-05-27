@@ -3,8 +3,9 @@ remove
 notebooks/eotools/__pycache__
 notebooks/eotools/roi.py
 data/eodag-downloads/*
-data/eodag-postprocess
-#data/eodag-serialize
-#data/shapefiles
-#data
+data/eodag-postprocess/*
+data/eodag-serialize/*
+data/shapefiles/*
+data/*
+data
 requirements.txt

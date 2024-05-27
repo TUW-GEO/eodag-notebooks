@@ -7,29 +7,20 @@ EODAG_PATH = $$(poetry env info --path)
 help:
 	@echo "make clean"
 	@echo " clean all jupyter checkpoints"
-	@echo "make manifest"
-	@echo " lock dependencies of poetry environment"
-	@echo "make develop"
-	@echo " create a development poetry environment"
 	@echo "make kernel"
-	@echo " make ipykernel based on poetry lock file"
+	@echo " make ipykernel and environment based on eoenv.yml file"
+	@echo "make environment"
+	@echo " create a environment from eoenv.yml file"
+	@echo "make teardown"
+	@echo "uninstalls the kernel and removes environment"
 	@echo "make jupyter"
 	@echo " launch JupyterLab server"
 
 clean:
 	rm --force --recursive .ipynb_checkpoints/
 
-develop:
-	poetry install
-	$(POETRY_ACTIVATE) pangeo-workflow-examples
-	@echo -e "poetry development environment is ready."
-
 kernel:
-	cd ~/work/eodag-workflows/setup
-	mkdir -p ~/.conda/envs
-	mamba env create -p ~/.conda/envs/eoenv -f eoenv.yml
-	mamba clean --all -f -y #&& fix-permissions /home/$NB_USER/.conda
-	@echo -e "environment has been created and cleaned"
+	make environment
 	conda run -p ~/.conda/envs/eoenv python -m ipykernel install --user --name "eoenv" --display-name "eoenv"
 	@echo -e "conda jupyter kernel is ready"
 

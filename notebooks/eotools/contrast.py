@@ -15,6 +15,7 @@ __version__ = '04-Aug-2023_v01'
 
 #Modules:
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -128,3 +129,23 @@ def stretch(I, p_min, p_max, pooled=True):
 
     tmp[:] =  (p_max - p_min) * (tmp - q_min) / (q_max - q_min) + p_min
     return I
+
+def histogram(arr, nbins=300, alpha=0.5, figsize=(5,5), title='Histogram'):
+    #Flatten
+    flat_r = arr[:, :, 0].flatten()
+    flat_g = arr[:, :, 1].flatten()
+    flat_b = arr[:, :, 2].flatten()
+
+    # You can set the number of bins and alpha individually
+    mbins = np.linspace(np.nanmin(arr), np.nanmax(arr), nbins)
+
+    # Plot 
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.hist(flat_r, color='red', bins=mbins, alpha=alpha)
+    ax.hist(flat_g, color='green', bins=mbins,  alpha=alpha)
+    ax.hist(flat_b, color='blue', bins=mbins,  alpha=alpha)
+
+    ax.set_title(title)
+    ax.set_xlabel('I')
+    ax.set_ylabel('n')
+    plt.show()

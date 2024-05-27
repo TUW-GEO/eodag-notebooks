@@ -5,7 +5,7 @@ import matplotlib.image as mpimg
 from eodag import EODataAccessGateway
 from dotenv import dotenv_values
 
-def prepare(path:str = "paths.yml", log:bool=True):
+def read_paths(path:str = "paths.yml"):
     '''
     This function gets the paths from paths.yml File and retrieves secrets from .env File.
 
@@ -14,38 +14,24 @@ def prepare(path:str = "paths.yml", log:bool=True):
     
     Returns:
         - secrets
-        - paths
+        - workspace
     '''
     # Get Paths
     with open(path, "r") as f:
-        paths = yaml.safe_load(f)
+        workspace = yaml.safe_load(f)
 
     # Get Secrets from .env File (defined in paths.yml)
-    secrets = dotenv_values(paths['credentials'])
+    secrets = dotenv_values(workspace['credentials'])
+    return secrets , workspace
 
-    # Check for Directories and create them if not exist
-    directories = [paths['download'], paths['serialize'], paths['post'], paths['shapefiles']]
-    for d in directories:
-        if not os.path.isdir(d):
-            ap = os.path.abspath(d)
-            os.mkdir(ap)
-            if log:
-                print(f'Made Dir: {ap}')
-        else:
-            ap = os.path.abspath(d)
-            if log:
-                print(f'Dir exists: {ap}')
 
-    return secrets, paths
-
-def configure(secrets:dict, ws_paths:dict):
-    dag = EODataAccessGateway()
+def configure(dag:EODataAccessGateway, secrets:dict, paths:dict):
     dag.set_preferred_provider("cop_dataspace") # Copernicus Data Space Ecosystem
 
     dag.update_providers_config(f"""
         cop_dataspace:
             download:
-                outputs_prefix: {os.path.abspath(ws_paths['download'])}
+                outputs_prefix: {os.path.abspath(paths['download'])}
             auth:
                 credentials:
                     username: {secrets['USER_KEY']}
@@ -73,9 +59,9 @@ def plot_quicklooks(products):
         plt.imshow(img)
     plt.tight_layout()
 
-def deserialize(filepath:str, ws_path:str, dag:EODataAccessGateway, log=True):
+def deserialize(filepath:str, workspace:str, dag:EODataAccessGateway, log=True):
     # Deserialize the Search Results
-    output_file = os.path.join(ws_path['serialize'], filepath)
+    output_file = os.path.join(workspace['serialize'], filepath)
     deserialized_search_results = dag.deserialize_and_register(output_file)
 
     if log:
