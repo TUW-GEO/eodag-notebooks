@@ -21,6 +21,7 @@ help:
 	@echo "  make all          - Run all the above tasks"
 	@echo "  "
 	@echo "  make teardown     - Remove the environment and kernel"
+	@echo "  make delete       - Deletes the cloned Repository"
 	@echo "  make clean        - Removes ipynb_checkpoints"
 	@echo "  make help         - Display this help message"
 
@@ -57,7 +58,11 @@ teardown:
 	mamba deactivate
 	mamba env remove -p ~/.conda/envs/$(ENV_NAME)
 	@echo "Kernel and Environment have been removed."
-	
+
+delete:
+	@echo "Deleting all files in $(REPO_NAME)..."
+	rm -rf $(REPO_NAME)
+	@echo "$(REPO_NAME) has been deleted."
 
 # Clean up. Removes ipynb_checkpoints
 clean:
