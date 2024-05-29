@@ -6,9 +6,9 @@ ENV_YML = environment.yml
 ENV_NAME = eoenv
 KERNEL_NAME = eo
 
-GIT_REPO = https://git.geo.tuwien.ac.at/npikall/eodag-workflows.git
+GIT_REPO = https://github.com/npikall/eodag-notebooks.git
 GIT_BRANCH = main
-REPO_NAME = eodag-workflows
+REPO_NAME = eodag-notebooks
 
 # Help command to display available targets
 help:
