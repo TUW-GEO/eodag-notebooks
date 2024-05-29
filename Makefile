@@ -1,41 +1,67 @@
 .ONESHELL:
 SHELL = /bin/bash
-.PHONY: help clean install environment test version dist
-POETRY_ACTIVATE = source $$(poetry env info --path)/bin/activate
-EODAG_PATH = $$(poetry env info --path)
 
+# Define variables
+ENV_YML = environment.yml
+ENV_NAME = eoenv
+KERNEL_NAME = eo
+
+GIT_REPO = https://git.geo.tuwien.ac.at/npikall/eodag-workflows.git
+GIT_BRANCH = main
+REPO_NAME = eodag-workflows
+
+# Help command to display available targets
 help:
-	@echo "make clean"
-	@echo " clean all jupyter checkpoints"
-	@echo "make kernel"
-	@echo " make ipykernel and environment based on eoenv.yml file"
-	@echo "make environment"
-	@echo " create a environment from eoenv.yml file"
-	@echo "make teardown"
-	@echo "uninstalls the kernel and removes environment"
-	@echo "make jupyter"
-	@echo " launch JupyterLab server"
+	@echo "Makefile for setting up environment, kernel, and pulling notebooks"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make notebooks    - Pull the notebooks from the Git repository"
+	@echo "  make environment  - Create the conda environment"
+	@echo "  make kernel       - Create the Jupyter kernel"
+	@echo "  make all          - Run all the above tasks"
+	@echo "  "
+	@echo "  make teardown     - Remove the environment and kernel"
+	@echo "  make clean        - Removes ipynb_checkpoints"
+	@echo "  make help         - Display this help message"
 
-clean:
-	rm --force --recursive .ipynb_checkpoints/
 
-kernel:
-	make environment
-	conda run -p ~/.conda/envs/eoenv python -m ipykernel install --user --name "eoenv" --display-name "eoenv"
-	@echo -e "conda jupyter kernel is ready"
+.PHONY: all notebooks environment kernel teardown clean
 
-environment:
-	cd ~/work/eodag-workflows/setup
+all: notebooks environment kernel 
+
+# Pull the notebooks from the Git repository
+notebooks:
+	@echo "Cloning the Git repository..."
+	git clone $(GIT_REPO) -b $(GIT_BRANCH) $(REPO_NAME)
+	@echo "Repository cloned."
+
+# Create the environment using conda
+environment: 
+	@echo "Creating conda environment..."
+	cd $(REPO_NAME)
 	mkdir -p ~/.conda/envs
-	mamba env create -p ~/.conda/envs/eoenv -f eoenv.yml
-	mamba clean --all -f -y #&& fix-permissions /home/$NB_USER/.conda
-	@echo -e "environment has been created and cleaned"
+	mamba env create -p ~/.conda/envs/$(ENV_NAME) -f $(ENV_YML)
+	mamba clean --all
+	@echo "Environment $(ENV_NAME) created."
 
+# Create a Jupyter kernel from the environment
+kernel: environment
+	@echo "Creating Jupyter kernel..."
+	mamba run -p ~/.conda/envs/$(ENV_NAME) python -m ipykernel install --user --name "$(KERNEL_NAME)" --display-name "$(KERNEL_NAME)"
+	@echo "Kernel $(KERNEL_NAME) created."
+
+# Remove the environment and kernel
 teardown:
-	source activate ~/.conda/envs/eoenv
-	jupyter kernelspec uninstall "eoenv" -f
-	conda deactivate
-	conda env remove -p ~/.conda/envs/eoenv
+	@echo "Removing the Kernel and the Environment..."
+	mamba activate ~/.conda/envs/$(ENV_NAME)
+	jupyter kernelspec uninstall "$(ENV_NAME)" -f
+	mamba deactivate
+	mamba env remove -p ~/.conda/envs/$(ENV_NAME)
+	@echo "Kernel and Environment have been removed."
+	
 
-jupyter: #kernel develop
-	jupyter lab ..
+# Clean up. Removes ipynb_checkpoints
+clean:
+	@echo "Removing ipynb_checkpoints..."
+	rm --force --recursive .ipynb_checkpoints/
+	@echo "Clean up completed."

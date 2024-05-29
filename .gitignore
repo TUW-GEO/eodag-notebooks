@@ -9,3 +9,4 @@ data/shapefiles/*
 data/*
 data
 requirements.txt
+Makefile_old
