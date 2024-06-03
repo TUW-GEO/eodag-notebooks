@@ -5,6 +5,7 @@ SHELL = /bin/bash
 ENV_YML = environment.yml
 ENV_NAME = eoenv
 KERNEL_NAME = eo
+LOCAL_CONDA = ~/.conda
 
 GIT_REPO = https://github.com/npikall/eodag-notebooks.git
 GIT_BRANCH = main
@@ -41,25 +42,23 @@ environment:
 	@echo "Creating conda environment..."
 	cd $(REPO_NAME)
 	mkdir -p ~/.conda/envs
-	mamba env create -p ~/.conda/envs/$(ENV_NAME) -f $(ENV_YML)
+	mamba env create -p $(LOCAL_CONDA)/envs/$(ENV_NAME) -f $(ENV_YML)
 	@echo "Environment $(ENV_NAME) created."
 
 # Create a Jupyter kernel from the environment
 kernel: environment
 	@echo "Creating Jupyter kernel..."
-	mamba run -p ~/.conda/envs/$(ENV_NAME) python -m ipykernel install --user --name "$(KERNEL_NAME)" --display-name "$(KERNEL_NAME)"
+	mamba run -p $(LOCAL_CONDA)/envs/$(ENV_NAME) python -m ipykernel install --user --name "$(KERNEL_NAME)" --display-name "$(KERNEL_NAME)"
 	@echo "Kernel $(KERNEL_NAME) created."
 
 # Remove the environment and kernel
 teardown:
 	@echo "Removing the Kernel and the Environment..."
-	mamba activate ~/.conda/envs/$(ENV_NAME)
-	jupyter kernelspec uninstall "$(ENV_NAME)" -f
-	mamba deactivate
-	mamba env remove -p ~/.conda/envs/$(ENV_NAME)
+	jupyter kernelspec uninstall "$(KERNEL_NAME)" -f 
+	mamba env remove -p $(LOCAL_CONDA)/envs/$(ENV_NAME)
 	@echo "Kernel and Environment have been removed."
 
-delete:
+delete: teardown
 	@echo "Deleting all files in $(REPO_NAME)..."
 	rm -rf $(REPO_NAME)
 	@echo "$(REPO_NAME) has been deleted."
