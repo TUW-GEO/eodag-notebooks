@@ -27,7 +27,7 @@ with open('notebooks/paths.yml', 'w') as outfile:
 directories = [new_paths['serialize'], new_paths['post'], new_paths['shapefiles']]
 
 for d in directories:
-    dir_path = Path(d).resolve()
+    dir_path = Path(d)
     if not dir_path.is_dir():
         dir_path.mkdir(parents=True, exist_ok=True)
         print(f'Made Directory: {dir_path}')
