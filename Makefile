@@ -19,6 +19,7 @@ help:
 	@echo "  make notebooks    - Pull the notebooks from the Git repository"
 	@echo "  make environment  - Create the conda environment"
 	@echo "  make kernel       - Create the Jupyter kernel"
+	@echo "  make setup        - Executes setup.py file"
 	@echo "  make all          - Run all the above tasks"
 	@echo "  "
 	@echo "  make teardown     - Remove the environment and kernel"
@@ -44,7 +45,7 @@ setup:
 # Create the environment using conda
 environment: 
 	@echo "Creating conda environment..."
-	mkdir -p ~/.conda/envs
+	mkdir -p $(LOCAL_CONDA)/envs
 	mamba env create -p $(LOCAL_CONDA)/envs/$(ENV_NAME) -f $(ENV_YML)
 	@echo "Environment $(ENV_NAME) created."
 
