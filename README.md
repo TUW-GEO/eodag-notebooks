@@ -55,6 +55,12 @@ In the case you just need the ``environment`` installed use this:
 make environment
 ```
 
+Also use the following __(optional)__ to execute the ``setup.py`` file, which will create a custom ``paths.yml`` file from the template
+and create the subdirectories specified in the paths file.
+```bash
+make setup
+```
+
 And to remove the `kernel` aswell as the `environment` use
 ```bash
 make teardown

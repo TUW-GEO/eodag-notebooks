@@ -6,15 +6,15 @@ with open('notebooks/paths_temp.yml', 'r') as f:
     paths = yaml.safe_load(f)
 
 # Get Directory name (should be different for each student)
-dir_name = Path('./').absolute().parent.name
+dir_name = Path('./').absolute()
 
 # Create empyt new dictionary for yaml file
 new_paths = {}
 
 # Copy old into new dict and replace {{USER}} with actual Username
 for key, val in paths.items():
-    if '{{USER}}' in val:
-        new_val = val.replace('{{USER}}', dir_name)
+    if 'USERDIR' in val:
+        new_val = val.replace('USERDIR', str(dir_name))
     else:
         new_val = val
     new_paths[key] = new_val

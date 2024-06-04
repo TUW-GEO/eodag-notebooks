@@ -30,7 +30,7 @@ help:
 
 .PHONY: all notebooks environment kernel teardown clean
 
-all: notebooks environment kernel setup
+all: notebooks setup environment kernel 
 
 # Pull the notebooks from the Git repository
 notebooks: 
