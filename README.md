@@ -59,37 +59,10 @@ And to remove the `kernel` aswell as the `environment` use
 ```bash
 make teardown
 ```
-## Alternatives
-If you want to work locally you can also use either `conda` or `venv` to create the right environments.
-
-### Conda
-If you want to use the Notebooks it would be best to create a new Environment either with:
+### Alternative Conda
+If you want to work locally you can also use either `conda` or `mamba` to create the right environments.
+If you want to use the Notebooks it would be best to create a new Environment with:
 ```bash
-conda env create -n eoenv --file eoenv.yml
+conda env create -n ENVNAME --file environment.yml
 ```
-
-or
-```bash
-conda create -n eoenv --file requirements.txt
-```
-
-### Venv
-Or if `conda` is not installed create an environment with venv
-```bash
-python -m venv .eoenv
-```
-
-activate the environment on windows with 
-```bash
-activate
-```
-
-or on Linux 
-```bash
-source .venv/bin/activate
-```
-
-and then install all Packages with pip
-```bash
-pip install -r requirements.txt
-```
+Change `ENVNAME` to whatever you want to call the environment.

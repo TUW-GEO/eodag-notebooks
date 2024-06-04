@@ -10,3 +10,5 @@ data/*
 data
 requirements.txt
 Makefile_old
+test.ipynb
+new_paths.yml

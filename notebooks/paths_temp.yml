@@ -1,0 +1,12 @@
+# This is a template where all paths for the notebooks are specified.
+# Run setup.py to get the paths.yml file which is used in the notebooks.
+
+credentials: ~/shared/datasets/rs/students/{{USER}}/.env # .env file should be in same directory as Notebooks
+
+download: ~/shared/datasets/rs/datapool/downloads # Directory where eodag downloads should be saved
+
+serialize: ~/shared/datasets/rs/students/{{USER}}/serialize # Directory where Serilazied Search Results are stored
+
+post: ~/shared/datasets/rs/students/{{USER}}/postprocess # Directory where files created in the post process can be stored
+
+shapefiles: ~/shared/datasets/rs/students/{{USER}}/shapefiles # Directory for shapefiles for Classifications

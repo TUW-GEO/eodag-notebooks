@@ -22,25 +22,28 @@ help:
 	@echo "  make all          - Run all the above tasks"
 	@echo "  "
 	@echo "  make teardown     - Remove the environment and kernel"
-	@echo "  make delete       - Deletes the cloned Repository"
+	@echo "  make delete       - Deletes the cloned Repository and removes kernel and environment"
 	@echo "  make clean        - Removes ipynb_checkpoints"
 	@echo "  make help         - Display this help message"
 
 
 .PHONY: all notebooks environment kernel teardown clean
 
-all: notebooks environment kernel 
+all: notebooks environment kernel setup
 
 # Pull the notebooks from the Git repository
-notebooks:
+notebooks: 
 	@echo "Cloning the Git repository..."
 	git clone $(GIT_REPO) -b $(GIT_BRANCH) $(REPO_NAME)
 	@echo "Repository cloned."
 
+setup:
+	cd $(REPO_NAME)
+	python setup.py
+
 # Create the environment using conda
 environment: 
 	@echo "Creating conda environment..."
-	cd $(REPO_NAME)
 	mkdir -p ~/.conda/envs
 	mamba env create -p $(LOCAL_CONDA)/envs/$(ENV_NAME) -f $(ENV_YML)
 	@echo "Environment $(ENV_NAME) created."
