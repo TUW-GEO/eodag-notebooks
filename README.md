@@ -28,10 +28,35 @@ USER_SECRET = "CHANGE_PASSWORD"
 These credentials need to be set on [the website of Copernuicus](https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/auth?client_id=cdse-public&response_type=code&scope=openid&redirect_uri=https%3A//dataspace.copernicus.eu/account/confirmed/1). __DO NOT USE SENSITIVE PASSWORDS__, as others might see your credentials on the jupyterhub.
 
 # Setup
-To use this Repository on Jupyterhub (or locally) you can use the Makefile to pull this repository and create the environment aswell as the kernel.
+To use this Repository on Jupyterhub (or locally) you can use the ``Makefile`` to pull this repository and create the environment aswell as the kernel.
 The make file uses `mamba` to install the `kernel` and the `environment`. If you don't have mamba installed 
 you will need to manually change the Makefile commands (swap `mamba` with `conda`)
 
+When you have done the setup correctly (executed `make all`) your directory should look something like this:
+
+```bash
+eodag-notebooks
+├── Makefile
+├── README.md
+├── environment.yml
+├── setup.py
+├── notebooks
+│   ├── 01_eodag_search.ipynb
+│   ├── 02_eodag_des_post.ipynb
+│   ├── 03_eodag_img_pro.ipynb
+│   ├── 04_eodag_search_post.ipynb
+│   ├── 05_eodag_merging.ipynb
+│   ├── 06_eodag_classify.ipynb
+│   ├── 07_eodag_roi.ipynb
+│   ├── paths.yml
+│   └── paths_temp.yml
+├── postprocess     # Directory where you can store your Results
+├── serialize       # Directory where you can store serialized searches
+└── shapefiles      # Directory where you can store shapefiles (geojson)
+```
+You should not mind most of the files. Use the `notebooks` to write your own code for your work and try to use the provided folder for saving data. 
+You can still absolutely modify the setup to your likeing.
+ 
 ## Working on the Jupyterhub
 When you work on the Jupyterhub copy the `Makefile` into your Directory and execute the following command in a terminal:
 ```bash
