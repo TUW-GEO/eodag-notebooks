@@ -24,6 +24,7 @@ help:
 	@echo "  "
 	@echo "  make teardown     - Remove the environment and kernel"
 	@echo "  make delete       - Deletes the cloned Repository and removes kernel and environment"
+	@echo "  make remove       - Deletes only the cloned Repository"
 	@echo "  make clean        - Removes ipynb_checkpoints"
 	@echo "  make help         - Display this help message"
 
@@ -64,6 +65,11 @@ teardown:
 	@echo "Kernel and Environment have been removed."
 
 delete: teardown
+	@echo "Deleting all files in $(REPO_NAME)..."
+	rm -rf $(REPO_NAME)
+	@echo "$(REPO_NAME) has been deleted."
+
+remove:
 	@echo "Deleting all files in $(REPO_NAME)..."
 	rm -rf $(REPO_NAME)
 	@echo "$(REPO_NAME) has been deleted."
