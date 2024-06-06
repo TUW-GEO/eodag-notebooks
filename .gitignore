@@ -16,3 +16,4 @@ config/*
 config
 test*
 setup_test.py
+eodag.yml

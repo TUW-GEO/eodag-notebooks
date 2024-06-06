@@ -35,13 +35,17 @@ def set_credentials():
         return None
     pswd = getpass.getpass('Password for CDSE:')
 
+    with open('notebooks/paths.yml', 'r') as f:
+        paths = yaml.safe_load(f)
+    output_pref = paths['download']
+
     new_yaml = {'cop_dataspace':{'priority': None,
                                 'search': None,
-                                'download': {'extract': None, 'outputs_prefix': None},
+                                'download': {'extract': None, 'outputs_prefix': output_pref},
                                 'auth': {'credentials': {'username': username, 'password': pswd}}}}
     
     eodag_path = Path.home() / '.config'/'eodag'/'eodag.yml'
-    with open(eodag_path) as f:
+    with open(eodag_path, 'w') as f:
         yaml.safe_dump(data=new_yaml, stream=f)
 
 def main():
