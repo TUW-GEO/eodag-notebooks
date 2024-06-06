@@ -12,3 +12,7 @@ requirements.txt
 Makefile_old
 test.ipynb
 paths.yml
+config/*
+config
+test*
+setup_test.py

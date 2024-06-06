@@ -1,35 +1,52 @@
 import yaml
+import getpass
 from pathlib import Path
 
-# Read Paths Template
-with open('notebooks/paths_temp.yml', 'r') as f:
-    paths = yaml.safe_load(f)
+def make_subdirs():
+    with open('notebooks/paths_temp.yml', 'r') as f:
+        paths_template = yaml.safe_load(f)
 
-# Get Directory name (should be different for each student)
-dir_name = Path('./').absolute()
+    cwd = Path.cwd()
 
-# Create empyt new dictionary for yaml file
-new_paths = {}
+    paths = {}
+    for key, val in paths_template.items():
+        if 'USERDIR' in val:
+            new_val = val.replace('USERDIR', str(cwd))
+        else:
+            new_val = val
+        paths[key] = new_val
 
-# Copy old into new dict and replace {{USER}} with actual Username
-for key, val in paths.items():
-    if 'USERDIR' in val:
-        new_val = val.replace('USERDIR', str(dir_name))
-    else:
-        new_val = val
-    new_paths[key] = new_val
+    with open('notebooks/paths.yml', 'w') as outfile:
+        yaml.dump(data=paths, stream=outfile)
 
-# Safe new yaml file
-with open('notebooks/paths.yml', 'w') as outfile:
-    yaml.dump(data=new_paths, stream=outfile)
+    dirs = [paths[elem] for elem in ['serialize', 'post', 'shapefiles']]
 
-# Create Workingspace
-directories = [new_paths['serialize'], new_paths['post'], new_paths['shapefiles']]
+    for d in dirs:
+        dir_path = Path(d)
+        if not dir_path.is_dir():
+            dir_path.mkdir(parents=False, exist_ok=True)
+            print(f'Directory created: {dir_path}')
+        else:
+            print(f'Directory already exists: {dir_path}')
 
-for d in directories:
-    dir_path = Path(d)
-    if not dir_path.is_dir():
-        dir_path.mkdir(parents=True, exist_ok=True)
-        print(f'Made Directory: {dir_path}')
-    else:
-        print(f'Directory exists: {dir_path}')
+def set_credentials():
+    username = input('Username for CDSE (or q to quit):')
+    if username.lower == 'q':
+        return None
+    pswd = getpass.getpass('Password for CDSE:')
+
+    new_yaml = {'cop_dataspace':{'priority': None,
+                                'search': None,
+                                'download': {'extract': None, 'outputs_prefix': None},
+                                'auth': {'credentials': {'username': username, 'password': pswd}}}}
+    
+    eodag_path = Path.home() / '.config'/'eodag'/'eodag.yml'
+    with open(eodag_path) as f:
+        yaml.safe_dump(data=new_yaml, stream=f)
+
+def main():
+    make_subdirs()
+    set_credentials()
+
+if __name__ == '__main__':
+    main()
