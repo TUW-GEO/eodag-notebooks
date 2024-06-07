@@ -13,6 +13,9 @@ def make_subdirs():
         if 'USERDIR' in val:
             new_val = val.replace('USERDIR', str(cwd))
             final_val = str(Path(new_val))
+        elif '~' in val:
+            new_val = val.replace('~', str(Path.home()))
+            final_val = str(Path(new_val))
         else:
             final_val = val
         paths[key] = final_val

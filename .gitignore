@@ -20,3 +20,4 @@ eodag.yml
 postprocess
 serialize
 shapefiles
+requirements-dev.txt
