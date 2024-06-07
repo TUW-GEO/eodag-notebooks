@@ -1,8 +1,5 @@
 # This is a template where all paths for the notebooks are specified.
 # Run setup.py to get the paths.yml file which is used in the notebooks.
-
-credentials: USERDIR/.env # .env file should be in same directory as Notebooks
-
 download: ~/shared/datasets/rs/datapool/downloads # Directory where eodag downloads should be saved
 
 serialize: USERDIR/serialize # Directory where Serilazied Search Results are stored

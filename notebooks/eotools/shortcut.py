@@ -3,9 +3,8 @@ import yaml
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from eodag import EODataAccessGateway
-from dotenv import dotenv_values
-
-def read_paths(path:str = "paths.yml"):
+from pathlib import Path
+def read_paths(filepath:str = "paths.yml"):
     '''
     This function gets the paths from paths.yml File and retrieves secrets from .env File.
 
@@ -13,16 +12,13 @@ def read_paths(path:str = "paths.yml"):
         - path: Filepath to paths.yml
     
     Returns:
-        - secrets
         - workspace
     '''
-    # Get Paths
-    with open(path, "r") as f:
+    src = Path(filepath).resolve()
+    with open(src, "r") as f:
         workspace = yaml.safe_load(f)
 
-    # Get Secrets from .env File (defined in paths.yml)
-    secrets = dotenv_values(workspace['credentials'])
-    return secrets , workspace
+    return workspace
 
 
 def configure(dag:EODataAccessGateway, secrets:dict, paths:dict):

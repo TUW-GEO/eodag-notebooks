@@ -41,29 +41,33 @@ def load_single_product(product, bands:list[str], params):
     ds = xr.Dataset(loaded_data)
     return ds
 
-def load_multiple_timestamps(products, bands:list, params):
+def load_multiple_timestamps(products, bands:list, *args, **kwargs):
     # Empty List where datasets are stored
     single_ds = []
     for product in products:
         # Load each dataarray and add to single_ds List
-        single_product = load_single_product(product=product, bands=bands, params=params)
+        single_product = load_single_product(product=product, bands=bands, *args, **kwargs)
         single_ds.append(single_product)
     # Merge datasets from List
     ds = xr.merge(single_ds)
     return ds
 
-def band_2_regex(band:str, **kwargs) -> str:
-    res = 60
+
+##############################################
+# Regex functions
+##############################################
+
+def band_2_regex(band:str,res=60, **kwargs) -> str:
     if 'resolution' in kwargs and kwargs['resolution'] is not None:
-        res = int(kwargs['resolution'] * 100_000)
+        res = int(round(kwargs['resolution'] * 100_000, 0))
     return rf'^(?!.*MSK).*{band}_{res}m.*$'
 
-def load_single_product_regex(product, bands:list[str], **params):
+def load_single_product_regex(product, bands:list[str], res=60, *args, **kwargs):
     loaded_data = {}
     for band in bands:
-        regex = band_2_regex(band=band, **params)
+        regex = band_2_regex(band=band,res=res, **kwargs)
         # Load Band into an xarray Dataarray
-        data = product.get_data(band=regex, **params)
+        data = product.get_data(band=regex, **kwargs)
 
         # Get rid of Dimensions of size 1 [e.g.: shapes from (1,300,500) to (300,500)]
         data = data.squeeze()
@@ -83,3 +87,18 @@ def load_single_product_regex(product, bands:list[str], **params):
     # Create a xarray Dataset from a dictionary of Dataarrays
     ds = xr.Dataset(loaded_data)
     return ds
+
+def load_multiple_timestamps_regex(products, bands:list, res,*args, **kwargs):
+    # Empty List where datasets are stored
+    single_ds = []
+    for product in products:
+        # Load each dataarray and add to single_ds List
+        single_product = load_single_product_regex(product=product, bands=bands, res=res, *args, **kwargs)
+        single_ds.append(single_product)
+    # Merge datasets from List
+    ds = xr.merge(single_ds)
+    return ds
+
+def get_data_regex(product, band:str,res:int, **kwargs):
+    regex = band_2_regex(band, res=res)
+    return product.get_data(band=regex, **kwargs)

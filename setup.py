@@ -12,9 +12,10 @@ def make_subdirs():
     for key, val in paths_template.items():
         if 'USERDIR' in val:
             new_val = val.replace('USERDIR', str(cwd))
+            final_val = str(Path(new_val))
         else:
-            new_val = val
-        paths[key] = new_val
+            final_val = val
+        paths[key] = final_val
 
     with open('notebooks/paths.yml', 'w') as outfile:
         yaml.dump(data=paths, stream=outfile)
