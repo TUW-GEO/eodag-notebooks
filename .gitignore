@@ -21,3 +21,4 @@ postprocess
 serialize
 shapefiles
 requirements-dev.txt
+student_download.ipynb

@@ -1,6 +1,8 @@
 import datetime as dt
 import xarray as xr
 import os
+from eodag.utils.exceptions import AddressNotFound
+
 
 def load_assets(root:str, res=60, only_spectral:bool=True, include_tci:bool=False):
     jp2_files = [file for dirs in os.walk(root, topdown=True)
@@ -16,11 +18,11 @@ def load_assets(root:str, res=60, only_spectral:bool=True, include_tci:bool=Fals
     
     return assets
 
-def load_single_product(product, bands:list[str], params):
+def load_single_product(product, bands:list[str], **kwargs):
     loaded_data = {}
     for band in bands:
         # Load Band into an xarray Dataarray
-        data = product.get_data(band=band, **params)
+        data = product.get_data(band=band, **kwargs)
 
         # Get rid of Dimensions of size 1 [e.g.: shapes from (1,300,500) to (300,500)]
         data = data.squeeze()
@@ -57,18 +59,25 @@ def load_multiple_timestamps(products, bands:list, *args, **kwargs):
 # Regex functions
 ##############################################
 
-def band_2_regex(band:str,res=60, **kwargs) -> str:
-    if 'resolution' in kwargs and kwargs['resolution'] is not None:
-        res = int(round(kwargs['resolution'] * 100_000, 0))
-    return rf'^(?!.*MSK).*{band}_{res}m.*$'
+def band_2_regex(band:str):
+    # regex = rf'^(?!.*MSK).*{band}_[0-9]*m.jp2$'
+    r10 = rf'^(?!.*MSK).*{band}_10m.jp2$'
+    r20 = rf'^(?!.*MSK).*{band}_20m.jp2$'
+    r60 = rf'^(?!.*MSK).*{band}_60m.jp2$'
+    return r10, r20, r60
 
-def load_single_product_regex(product, bands:list[str], res=60, *args, **kwargs):
+def load_single_product_regex(product, bands:list[str], **kwargs):
     loaded_data = {}
     for band in bands:
-        regex = band_2_regex(band=band,res=res, **kwargs)
+        regex = band_2_regex(band=band)
         # Load Band into an xarray Dataarray
-        data = product.get_data(band=regex, **kwargs)
-
+        for r in regex:
+            try:
+                data = product.get_data(band=r, **kwargs)
+                break
+            except:
+                AddressNotFound
+        
         # Get rid of Dimensions of size 1 [e.g.: shapes from (1,300,500) to (300,500)]
         data = data.squeeze()
 
@@ -88,17 +97,23 @@ def load_single_product_regex(product, bands:list[str], res=60, *args, **kwargs)
     ds = xr.Dataset(loaded_data)
     return ds
 
-def load_multiple_timestamps_regex(products, bands:list, res,*args, **kwargs):
+def load_multiple_timestamps_regex(products, bands:list, **kwargs):
     # Empty List where datasets are stored
     single_ds = []
     for product in products:
         # Load each dataarray and add to single_ds List
-        single_product = load_single_product_regex(product=product, bands=bands, res=res, *args, **kwargs)
+        single_product = load_single_product_regex(product=product, bands=bands, **kwargs)
         single_ds.append(single_product)
     # Merge datasets from List
     ds = xr.merge(single_ds)
     return ds
 
 def get_data_regex(product, band:str,res:int, **kwargs):
-    regex = band_2_regex(band, res=res)
-    return product.get_data(band=regex, **kwargs)
+    regex = band_2_regex(band)
+    for r in regex:
+        try:
+            data = product.get_data(band=r, **kwargs)
+            break
+        except:
+            AddressNotFound
+    return data
