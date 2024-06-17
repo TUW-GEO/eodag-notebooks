@@ -48,8 +48,16 @@ def set_credentials():
                                 'download': {'extract': None, 'outputs_prefix': output_pref},
                                 'auth': {'credentials': {'username': username, 'password': pswd}}}}
     
-    eodag_path = Path.home() / '.config'/'eodag'/'eodag.yml'
-    with open(eodag_path, 'w') as f:
+    eodag_path = Path.home() / '.config'/'eodag'
+    if not eodag_path.is_dir():
+        eodag_path.mkdir(parents=True, exist_ok=True)
+        print(f'Directory created: {eodag_path}')
+    else:
+        print(f'Directory already exists: {eodag_path}')
+
+    eodag_config_file = eodag_path /'eodag.yml'
+
+    with eodag_config_file.open(mode='w') as f:
         yaml.safe_dump(data=new_yaml, stream=f)
 
 def main():
