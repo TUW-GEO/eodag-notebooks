@@ -9,8 +9,8 @@ aswell as an png Image. The usage of QGIS in this exercies is therefore unnecess
 '''
 
 # Variables
-__name__ = 'roi'
-__version__ = '04-Aug-2023_v01'
+__name__ = 'regions'
+__version__ = '20-Jun-2024_v01'
 
 # Modules
 import numpy as np

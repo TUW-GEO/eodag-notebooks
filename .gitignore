@@ -23,3 +23,9 @@ shapefiles
 requirements-dev.txt
 student_download.ipynb
 regex_error.md
+combine*
+showcase*
+example*
+enhancement*
+myeoprod.py
+reverse_search.ipynb

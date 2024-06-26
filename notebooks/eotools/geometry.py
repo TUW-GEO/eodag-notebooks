@@ -1,3 +1,19 @@
+#Description
+'''
+This script is intended to simplify further processes in your code. 
+In here you will find all the necessary functions to transform Geojson Files 
+into Polygons and to preprocess the data for classification.
+'''
+
+
+
+#Variables:
+__name__ = 'geometry'
+__version__ = '20-Jun-2024_v01'
+
+
+
+#Modules:
 import rioxarray
 import xarray as xr
 import numpy as np
@@ -6,7 +22,19 @@ from shapely.geometry import mapping
 from sklearn.model_selection import train_test_split
 
 
-def clip_dataset_2_shapefile(ds, shapefile):
+def clip_dataset_2_shapefile(ds:xr.Dataset, shapefile:str) -> xr.Dataset:
+    '''
+    Clips an xarray Dataset to a shapefile.
+
+    Params:
+    ------
+        - ``ds``: xarray.Dataset
+        - ``shapefile``: Filepath to Shapefile
+
+    Returns:
+    -------
+        - ``ds``: Clipped xarray.Dataset
+    '''
     clip_shape = gpd.read_file(shapefile)
     ds = ds.rio.clip(clip_shape.geometry.apply(mapping), clip_shape.crs, drop=False, invert=False)
     return ds
@@ -16,9 +44,11 @@ def geojson_to_polygon(path:str) -> list:
     Reads a geojson File and returns a List of Polygons 
 
     Params:
+    -------
         - ``path``: Filepath to Geojson
 
     Returns: 
+    -------
         - ``polygons``: List of Polygons
     '''
     gdf = gpd.read_file(path)
@@ -29,10 +59,12 @@ def geojson_to_polygon_dict(path:str) -> dict:
     '''
     Uses the Path of a Geojson File to extract the polygons and puts them into a Dictionary.
 
-    Params: 
+    Params:
+    ------- 
         - ``path``: Filepath to Geojson
 
     Returns: 
+    -------
         - ``polygons_dict``
     '''
     polygons = geojson_to_polygon(path)
@@ -45,10 +77,12 @@ def clip_array(ds:xr.Dataset, polygons):
     to the geometry.
 
     Params:
+    -------
         - ``ds``: xarray.Dataset
         - ``polygons``: shapely.geometry
     
     Returns:
+    -------
         - ``clipped_nan``: clipped dataset where values outside of polygons have Nan type
     '''
     clipped = ds.rio.clip(polygons, invert=False, all_touched=False, drop=True)
@@ -61,6 +95,7 @@ def preprocess_data_to_classify(ds:xr.Dataset, feature_path:str, nonfeature_path
     and a list of strings of the desired Bandnames in the Dataset and returns The Training and Test data for some Classifikators.
 
     Params:
+    -------
         - ``ds``: xarray.Dataset
         - ``feature_path``: Filepath to Geojson with Polygons, which represent the Feature (e.g.: forested Areas)
         - ``nonfeature_path``: Filepath to Geojson, which does not have the feature (e.g.: not forested Areas)
@@ -68,7 +103,8 @@ def preprocess_data_to_classify(ds:xr.Dataset, feature_path:str, nonfeature_path
                                 If None, then takes all in the Dataset.
 
     Returns:
-        -  ``X_train, X_test, y_train, y_test``; Training and Test Split for scikit.learn Classificators
+    -------
+        -  ``X_train, X_test, y_train, y_test``: Training and Test Split for scikit.learn Classificators
     '''
     # List all Bands which are loaded as Variables into the Dataset
     if bands == None:
