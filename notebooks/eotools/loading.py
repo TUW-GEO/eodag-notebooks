@@ -223,10 +223,9 @@ def get_data_regex(product, band:str, **kwargs):
     for r in regex:
         try:
             data = product.get_data(band=r, **kwargs)
-            break
+            return data
         except:
             AddressNotFound
-    return data
 
 ##############################################
 # Reverse Search functions
