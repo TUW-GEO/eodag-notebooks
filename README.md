@@ -5,7 +5,6 @@
 # eodag-workflows
 
 This repository stores an example gallery repo for loading and processing Sentinel Data from Copernicus Dataspace Ecosystem useing EODAG. 
-The Notebooks are numbered in the order that we want them to appear on the gallery website.
 The repo contains the following elements in the ``notebooks`` directory:
 
 - `01_eodag_search.ipynb` A notebook just for the Search of EO Data 
@@ -16,84 +15,51 @@ The repo contains the following elements in the ``notebooks`` directory:
 - `06_eodag_classify.ipynb` A notebook for different classification processes 
 - `07_eodag_roi.ipynb` A Notebook which shows how to create Geojsons of Regions of Interest.
 
-- Additionaly different scripts explaining the passing of credentials to EODAG methods
+# Before getting started
+In order to acquire and process Sentinel Data you will need to have an account at [Copernicus Dataspace Ecosystem (CDSE)](https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/auth?client_id=cdse-public&response_type=code&scope=openid&redirect_uri=https%3A//dataspace.copernicus.eu/account/confirmed/1). Use the provided Link or visit: *https://dataspace.copernicus.eu/*
 
-To properly run the notebooks, you will need to create a file called `.env` which includes your credentials to the 
-Copernicus Dataspace Ecosystem. The files contents should look similar to the following:
-```c
-USER_KEY = "CHANGE_USERNAME"
-USER_SECRET = "CHANGE_PASSWORD"
-```
-
-These credentials need to be set on [the website of Copernuicus](https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/auth?client_id=cdse-public&response_type=code&scope=openid&redirect_uri=https%3A//dataspace.copernicus.eu/account/confirmed/1). __DO NOT USE SENSITIVE PASSWORDS__, as others might see your credentials on the jupyterhub.
-
-# Setup
-To use this Repository on Jupyterhub (or locally) you can use the ``Makefile`` to pull this repository and create the environment aswell as the kernel.
-The make file uses `mamba` to install the `kernel` and the `environment`. If you don't have mamba installed 
-you will need to manually change the Makefile commands (swap `mamba` with `conda`)
-
-When you have done the setup correctly (executed `make all`) your directory should look something like this:
-
+# Getting started on Jupyterlab
+Copy the provided `Makefile` into your `HOME` directory. Open a Terminal (where you placed the `Makefile`) and type the following command.
 ```bash
+make all
+```
+This command will:
+
+- pull the **notebooks** from the Git repository
+- execute the ``setup.py`` file from the repo (adds some folders to store data and creates a config file where your Credentials for CDSE will be stored)
+- create a conda **environment** from ``environment.yml`` file
+- and creates a **kernel**
+
+So have your credentials for CDSE ready when running this command, or run the `setup.py` file later on to set your credentials. The ``makefile`` has a `make setup` command, which will do that for you.
+
+After the setup has finished you will find the following files in your directory.
+
+```sh
 eodag-notebooks
 ├── Makefile
 ├── README.md
 ├── environment.yml
 ├── setup.py
 ├── notebooks
-│   ├── 01_eodag_search.ipynb
-│   ├── 02_eodag_des_post.ipynb
-│   ├── 03_eodag_img_pro.ipynb
-│   ├── 04_eodag_search_post.ipynb
-│   ├── 05_eodag_merging.ipynb
-│   ├── 06_eodag_classify.ipynb
-│   ├── 07_eodag_roi.ipynb
+│   ├── 01_eodag_search.ipynb       # Searching for Data
+│   ├── 02_eodag_des_post.ipynb     # Download Data from serialized Search
+│   ├── 03_eodag_img_pro.ipynb      # Image Processing (Contrast, Stacking,...)
+│   ├── 04_eodag_search_post.ipynb  # Search and Postprocessing
+│   ├── 05_eodag_merging.ipynb      # Merging of overlapping Geographical extents
+│   ├── 06_eodag_classify.ipynb     # Classification
+│   ├── 07_eodag_roi.ipynb          # Polygons of regions of Interest
 │   ├── paths.yml
 │   └── paths_temp.yml
 ├── postprocess     # Directory where you can store your Results
 ├── serialize       # Directory where you can store serialized searches
 └── shapefiles      # Directory where you can store shapefiles (geojson)
 ```
-You should not mind most of the files. Use the `notebooks` to write your own code for your work and try to use the provided folder for saving data. 
-You can still absolutely modify the setup to your likeing.
- 
-## Working on the Jupyterhub
-When you work on the Jupyterhub copy the `Makefile` into your Directory and execute the following command in a terminal:
-```bash
-make all
-```
+Here you find the Notebooks 01 - 07 each of them explains something different. 
+It is advised, that you create a new notebook and use all the code-snippets which you would like to use yourself from the provided notebooks.
 
-## Working locally
-If you work locally you will have to clone the Repository with:
+## Permissions 
+As a student you have *read and write* permissions in your `HOME` directory. Furthermore you have *reading* rights in the `shared` directory. Here we have a directory
+`shared/datasets/rs/datapool/download` where we can store the data you would like to use for your work. As you do not have rights to download data there you have two options.
 
-```bash
-git clone https://github.com/npikall/eodag-notebooks.git
-```
-
-In order to create a new environment with the right dependencies and to create an Python ``kernel`` you can use the make file as follows.
-```bash
-make kernel
-```
-
-In the case you just need the ``environment`` installed use this:
-```bash
-make environment
-```
-
-Also use the following __(optional)__ to execute the ``setup.py`` file, which will create a custom ``paths.yml`` file from the template
-and create the subdirectories specified in the paths file.
-```bash
-make setup
-```
-
-And to remove the `kernel` aswell as the `environment` use
-```bash
-make teardown
-```
-### Alternative Conda
-If you want to work locally you can also use either `conda` or `mamba` to create the right environments.
-If you want to use the Notebooks it would be best to create a new Environment with:
-```bash
-conda env create -n ENVNAME --file environment.yml
-```
-Change `ENVNAME` to whatever you want to call the environment.
+1. Provide a `search_results.geojson` file (see Notebook 1) and we will download the data for you onto the Jupyterlab.
+2. Download the data to your home directory by changeing the download path in the `paths.yml` file.
