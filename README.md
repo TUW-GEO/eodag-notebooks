@@ -2,7 +2,7 @@
 
 <img src="https://dataspace.copernicus.eu/sites/default/files/styles/opengraph/public/media/images/2023-03/og_share.png?itok%253DzjtW85Fb" width="200">
 
-# eodag-workflows
+# eodag-notebooks
 
 This repository stores an example gallery repo for loading and processing Sentinel Data from Copernicus Dataspace Ecosystem useing EODAG. 
 The repo contains the following elements in the ``notebooks`` directory:
