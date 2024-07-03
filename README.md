@@ -21,6 +21,7 @@ In order to acquire and process Sentinel Data you will need to have an account a
 
 # Getting started on Jupyterlab
 Copy the provided `Makefile` into your `HOME` directory. Open a Terminal (where you placed the `Makefile`) and type the following command.
+
 ```bash
 make all
 ```
