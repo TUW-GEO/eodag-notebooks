@@ -4,7 +4,8 @@
 
 # eodag-notebooks
 
-This repository stores an example gallery repo for loading and processing Sentinel Data from Copernicus Dataspace Ecosystem useing EODAG. 
+This repository stores an example gallery repo for loading and processing Sentinel Data from Copernicus Dataspace Ecosystem useing EODAG. Futhermore it is intended to be used on the Jupyterlab of TU Wien. Therefore the `Makefile` and `setup.py` are provided to make the setup easier on the Jupyterhub and **should not be used on your local machine**. If you want to use the Notebooks on your local machine, create a new conda environment from the `environment.yml` file and manually enter your credentials for CDSE or any other provider in the `~/.config/eodag/eodag.yml` file.
+
 The repo contains the following elements in the ``notebooks`` directory:
 
 - `01_eodag_search.ipynb` A notebook just for the Search of EO Data 
