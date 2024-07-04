@@ -9,7 +9,7 @@ LOCAL_CONDA = ~/.conda
 
 GIT_REPO = https://github.com/npikall/eodag-notebooks.git
 GIT_BRANCH = main
-REPO_NAME = ~/eodag-notebooks
+REPO_NAME = eodag-notebooks
 
 # Help command to display available targets
 help:
