@@ -18,7 +18,7 @@ import rioxarray
 import xarray as xr
 import numpy as np
 import geopandas as gpd
-from shapely.geometry import mapping
+from shapely.geometry import mapping, box
 from sklearn.model_selection import train_test_split
 
 
@@ -55,21 +55,50 @@ def geojson_to_polygon(path:str) -> list:
     polygons = [feature for feature in gdf.geometry]
     return polygons
 
-def geojson_to_polygon_dict(path:str) -> dict:
+def geojson_to_polygon_dict(path:str, ds:xr.Dataset=None) -> dict:
     '''
     Uses the Path of a Geojson File to extract the polygons and puts them into a Dictionary.
 
     Params:
     ------- 
         - ``path``: Filepath to Geojson
-
+        - ``ds``: xarray.Dataset (optional)
     Returns: 
     -------
         - ``polygons_dict``
     '''
-    polygons = geojson_to_polygon(path)
+    if ds is not None:
+        polygons = [poly for poly in geojson_to_polygon(path) if check_in_bounds(dataset=ds, polygon=poly)]
+        if len(polygons) == 0:
+            raise ValueError('No polygons in the GeoJSON file are within the bounds of the xarray Dataset.')
+    else:
+        polygons = geojson_to_polygon(path)
+        
     polygons_dict = {idx: [polygon] for idx, polygon in enumerate(polygons)}
     return polygons_dict
+
+def check_in_bounds(dataset, polygon):
+    """
+    Überprüft, ob ein gegebenes Polygon innerhalb des geographischen Bereichs eines xarray Datasets liegt.
+
+    Parameters:
+    dataset (xarray.Dataset): Das xarray Dataset mit den geographischen Koordinaten 'lat' und 'lon'.
+    polygon (shapely.geometry.Polygon): Das Polygon, das überprüft werden soll.
+
+    Returns:
+    bool: True, wenn das Polygon innerhalb des geographischen Bereichs des Datasets liegt, andernfalls False.
+    """
+    # Extrahiere die geographischen Grenzen des xarray Datasets
+    lat_min = dataset.coords['y'].min().item()
+    lat_max = dataset.coords['y'].max().item()
+    lon_min = dataset.coords['x'].min().item()
+    lon_max = dataset.coords['x'].max().item()
+
+    # Erstelle ein Rechteck, das den geographischen Bereich des xarray Datasets repräsentiert
+    bounding_box = box(lon_min, lat_min, lon_max, lat_max)
+
+    # Überprüfe, ob das Polygon innerhalb des geographischen Bereichs liegt
+    return bounding_box.contains(polygon)
 
 def clip_array(ds:xr.Dataset, polygons):
     '''
@@ -111,8 +140,8 @@ def preprocess_data_to_classify(ds:xr.Dataset, feature_path:str, nonfeature_path
         bands = list(ds.data_vars)
 
     # Geojsons from Features to Polygons
-    polygons_feat = geojson_to_polygon_dict(feature_path)
-    polygons_nonfeat = geojson_to_polygon_dict(nonfeature_path)
+    polygons_feat:dict = geojson_to_polygon_dict(feature_path, ds=ds)
+    polygons_nonfeat:dict = geojson_to_polygon_dict(nonfeature_path, ds=ds)
 
     # Dictionaries with Dataarrays, each clipped by a Polygon
     data_dict_feat = {idx: clip_array(ds, polygon) for idx, polygon in polygons_feat.items()}

@@ -212,6 +212,26 @@ def auto_clip_dataarray(dataarray: xr.DataArray, percentile: float = 0.02, poole
     
     return clipped_dataarray
 
+def auto_clip_dataset(ds, *args, **kwargs):
+    '''
+    This function clips the values of a Dataset using the auto_clip_dataarray function.
+
+    Params:
+    -------
+        - ds: xr.Dataset -> Dataset to be clipped
+        - *args: -> arguments to be passed to the auto_clip_dataarray function
+        - **kwargs: -> keyword arguments to be passed to the auto_clip_dataarray function
+
+    Returns:   
+    --------
+        - xr.Dataset: Clipped Dataset.
+    '''
+    ds = ds.copy()
+    for var in ds.data_vars:
+        clipped = auto_clip_dataarray(ds[var].copy(), *args, **kwargs)
+        ds[var] = clipped
+    return ds
+
 def stretch_dataarray(dataarray: xr.DataArray, p_min: float, p_max: float, pooled: bool = True) -> xr.DataArray:
     '''
     This function stretches the values of a DataArray using the stretch function.
