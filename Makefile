@@ -7,7 +7,7 @@ ENV_NAME = eoenv
 KERNEL_NAME = eo
 LOCAL_CONDA = ~/.conda
 
-GIT_REPO = https://github.com/npikall/eodag-notebooks.git
+GIT_REPO = https://github.com/TUW-GEO/eodag-notebooks.git
 GIT_BRANCH = main
 REPO_NAME = eodag-notebooks
 
