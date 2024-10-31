@@ -19,6 +19,8 @@ The repo contains the following elements in the ``notebooks`` directory:
 # Before getting started
 In order to acquire and process Sentinel Data you will need to have an account at [Copernicus Dataspace Ecosystem (CDSE)](https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/auth?client_id=cdse-public&response_type=code&scope=openid&redirect_uri=https%3A//dataspace.copernicus.eu/account/confirmed/1). Use the provided Link or visit: *https://dataspace.copernicus.eu/*
 
+Make sure that you are registered as a _Natural Person_. If you are registered as _research organisation_ the download of the data is not possible.
+
 # Getting started on Jupyterlab
 Copy the provided `Makefile` into your `HOME` directory. Open a Terminal (where you placed the `Makefile`) and type the following command.
 
